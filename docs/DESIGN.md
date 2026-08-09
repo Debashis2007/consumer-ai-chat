@@ -1,7 +1,7 @@
 # Design: Consumer AI Chat
 
 **Project:** `consumer-ai-chat`  
-**Parent system design:** [01 — LLM Inference Serving](../01-llm-inference-serving.md)
+**Parent system design:** [01 — LLM Inference Serving](https://github.com/Debashis2007/consumer-ai-chat/blob/main/01-llm-inference-serving.md)
 
 ## 1. What this POC demonstrates
 
