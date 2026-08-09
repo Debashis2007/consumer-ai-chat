@@ -1,0 +1,40 @@
+"""Consumer AI Chat — thin self-contained FastAPI POC."""
+
+from __future__ import annotations
+
+from typing import Optional
+
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel, Field
+
+from poc_core import MockLLM, TokenBucket, health_payload
+from poc_core.safety import SafetyPlane
+from poc_core.stores import InMemoryStore, MockVectorIndex
+
+USE_CASE = "Consumer AI Chat"
+app = FastAPI(title=USE_CASE)
+llm = MockLLM()
+store = InMemoryStore()
+safety = SafetyPlane()
+
+@app.get("/health")
+def health():
+    return health_payload(USE_CASE)
+
+
+quotas = {"free": TokenBucket(5, 0.5), "paid": TokenBucket(50, 5)}
+
+class ChatIn(BaseModel):
+    prompt: str
+    tier: str = "free"
+
+@app.post("/chat")
+async def chat(body: ChatIn):
+    q = quotas.get(body.tier) or quotas["free"]
+    if not q.allow():
+        raise HTTPException(429, detail="shed: free tier quota exceeded")
+    decision = safety.check_input(body.prompt)
+    if decision.action != "allow":
+        return {"action": decision.action, "reason_code": decision.reason_code}
+    text = await llm.complete(body.prompt)
+    return {"tier": body.tier, "model": llm.model, "text": text, "quota_remaining": q.remaining()}
