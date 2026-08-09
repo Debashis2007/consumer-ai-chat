@@ -1,5 +1,7 @@
 # Use Case: Consumer AI Chat
 
+**YouTube walkthrough:** [Consumer Ai Chat — System Design #Shorts](https://youtu.be/flQZWSZxMOc)
+
 **Design doc:** [docs/DESIGN.md](./docs/DESIGN.md) — architecture, patterns, and why.
 
 
@@ -55,6 +57,9 @@ Apply parent patterns:
 
 
 ## Design walkthrough (opens on GitHub)
+
+> **Watch on YouTube:** [Consumer Ai Chat — System Design #Shorts](https://youtu.be/flQZWSZxMOc)
+
 
 ![Design overview](docs/video/design-overview.gif)
 
